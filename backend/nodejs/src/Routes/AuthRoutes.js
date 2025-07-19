@@ -48,18 +48,21 @@ router.get("/google/callback",
             // Update user with refresh token
             await UserModel.findByIdAndUpdate(user._id, { refreshToken });
             
-            // Set HTTP-only cookie
-            res.cookie('accessToken', accessToken, {
+            const cookiesOptions = {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === 'production',
-                sameSite: 'strict',
+                sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax', // Allow cross-origin cookies in production
+                path: '/' // Ensure cookies are accessible across the app
+            }
+
+            // Set HTTP-only cookie
+            res.cookie('accessToken', accessToken, {
+                ...cookiesOptions,
                 maxAge: 15 * 60 * 1000 // 15 minutes
             });
             
             res.cookie('refreshToken', refreshToken, {
-                httpOnly: true,
-                secure: process.env.NODE_ENV === 'production',
-                sameSite: 'strict',
+                ...cookiesOptions,
                 maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
             });
             
