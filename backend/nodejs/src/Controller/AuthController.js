@@ -5,6 +5,8 @@ const jwtUtil = require("../Utils/JwtUtil")
 const EncryptUtil = require("../Utils/EncryptUtil")
 const OtpUtil = require("../Utils/OtpUtil")
 const SmsUtil = require("../Utils/SmsUtil")
+const { SignupValidationSchema } = require("../ValidationSchema/UserValidationSchema");
+
 
 // Helper function to calculate time ago
 const getTimeAgo = (date) => {
@@ -63,6 +65,17 @@ const addUser = async (req, res) => {
     try {
         const { name, email, password, mobile } = req.body;
 
+        // Validate input using signup schema
+        try {
+            SignupValidationSchema.parse({ name, email, password, mobile });
+        } catch (validationError) {
+            return res.status(400).json({
+                success: false,
+                message: "Validation failed",
+                errors: validationError.errors.map(err => `${err.path.join('.')}: ${err.message}`).join(', ')
+            });
+        }
+
         // Check if user already exists
         const existingUser = await UserModel.findOne({ email });
         if (existingUser) {
@@ -70,6 +83,17 @@ const addUser = async (req, res) => {
                 success: false,
                 message: "User already exists with this email"
             });
+        }
+
+        // Check if mobile number already exists (if provided)
+        if (mobile) {
+            const existingMobileUser = await UserModel.findOne({ mobile });
+            if (existingMobileUser) {
+                return res.status(400).json({
+                    success: false,
+                    message: "User already exists with this mobile number"
+                });
+            }
         }
 
         // Hash password
@@ -80,8 +104,15 @@ const addUser = async (req, res) => {
             name,
             email,
             password: hashedPassword,
-            mobile,
-            role: "user"
+            mobile: mobile || undefined, // Only set if provided
+            role: "user",
+            isCompleteProfile: false,
+            notificationSettings: {
+                email: true,
+                push: true,
+                threats: true,
+                safety: true
+            }
         });
 
         // Generate tokens
@@ -103,18 +134,21 @@ const addUser = async (req, res) => {
         }
         console.log("Mail sent successfully to: ", newUser.email);
 
-        // Set HTTP-only cookie
-        res.cookie('accessToken', accessToken, {
+        // Set HTTP-only cookies
+        const cookieOptions = {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
-            sameSite: 'strict',
+            sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+            path: '/'
+        };
+
+        res.cookie('accessToken', accessToken, {
+            ...cookieOptions,
             maxAge: 15 * 60 * 1000 // 15 minutes
         });
 
         res.cookie('refreshToken', refreshToken, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: 'strict',
+            ...cookieOptions,
             maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
         });
 
@@ -126,7 +160,9 @@ const addUser = async (req, res) => {
                 name: newUser.name,
                 email: newUser.email,
                 mobile: newUser.mobile,
-                role: newUser.role
+                role: newUser.role,
+                isCompleteProfile: newUser.isCompleteProfile,
+                notificationSettings: newUser.notificationSettings
             }
         });
     } catch (error) {
@@ -137,6 +173,7 @@ const addUser = async (req, res) => {
         });
     }
 };
+
 
 // forgetPassword - Enhanced with security token
 const forgetPassword = async (req, res) => {
