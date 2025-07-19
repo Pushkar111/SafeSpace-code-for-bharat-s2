@@ -7,7 +7,9 @@ const FASTAPI_BASE_URL = process.env.REACT_APP_FASTAPI_URL || 'http://localhost:
 export const nodeAPI = axios.create({
   baseURL: API_BASE_URL,
   withCredentials: true, // For HttpOnly cookies
-  timeout: 10000, // 10 second timeout
+  headers: {
+    'Content-Type': 'application/json',
+  },
 });
 
 export const fastAPI = axios.create({

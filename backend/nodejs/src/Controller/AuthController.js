@@ -358,27 +358,47 @@ const loginUserWithEmailPassword = async (req, res) => {
         const refreshToken = jwtUtil.generateRefreshToken(user._id);
 
         // Update user with refresh token
-        const updatedUser = await UserModel.findByIdAndUpdate(user._id, { refreshToken });
+        await UserModel.findByIdAndUpdate(user._id, { refreshToken });
 
-        // Set HTTP-only cookies
-        res.cookie('accessToken', accessToken, {
+        // Set HTTP-only cookies with proper configuration for production
+        const cookieOptions = {
             httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: 'strict',
+            secure: process.env.NODE_ENV === 'production', // Only HTTPS in production
+            sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax', // 'none' for cross-origin in production
+            domain: process.env.NODE_ENV === 'production' ? undefined : undefined, // Let browser handle domain
+            path: '/'
+        };
+
+        res.cookie('accessToken', accessToken, {
+            ...cookieOptions,
             maxAge: 15 * 60 * 1000 // 15 minutes
         });
 
         res.cookie('refreshToken', refreshToken, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: 'strict',
+            ...cookieOptions,
             maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
         });
 
         res.status(200).json({
             success: true,
             message: "Login successful",
-            user: updatedUser
+            user: {
+                id: user._id,
+                name: user.name,
+                email: user.email,
+                mobile: user.mobile,
+                role: user.role,
+                age: user.age,
+                gender: user.gender,
+                bloodGroup: user.bloodGroup,
+                hobbies: user.hobbies,
+                bio: user.bio,
+                location: user.location,
+                isCompleteProfile: user.isCompleteProfile,
+                notificationSettings: user.notificationSettings,
+                preferredCities: user.preferredCities,
+                profilePic: user.profilePic
+            }
         });
     } catch (error) {
         console.error("Login error:", error);
@@ -419,32 +439,48 @@ const loginUserWithMobilePassword = async (req, res) => {
             const refreshToken = jwtUtil.generateRefreshToken(userFromMobile._id);
 
             // update refreshToken in db
-            const updatedUser = await userFromMobile.updateOne({refreshToken: refreshToken});
+            await userFromMobile.updateOne({refreshToken: refreshToken});
 
             console.log("Login Successfull with Mobile + Password: ", userFromMobile);
 
-            // Set HTTP-only cookies
-            res.cookie('accessToken', accessToken, {
+            // Set HTTP-only cookies with proper configuration
+            const cookieOptions = {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === 'production',
-                sameSite: 'lax',
+                sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+                path: '/'
+            };
+
+            res.cookie('accessToken', accessToken, {
+                ...cookieOptions,
                 maxAge: 15 * 60 * 1000 // 15 minutes
             });
 
             res.cookie('refreshToken', refreshToken, {
-                httpOnly: true,
-                secure: process.env.NODE_ENV === 'production',
-                sameSite: 'lax',
+                ...cookieOptions,
                 maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
             });
 
             return res.status(200).json({
-                message: "Login Successfull with Mobile + Password",
-                user: updatedUser,
-                tokens: {
-                    accessToken: accessToken,
-                    refreshToken: refreshToken
-                },
+                success: true,
+                message: "Login successful",
+                user: {
+                    id: userFromMobile._id,
+                    name: userFromMobile.name,
+                    email: userFromMobile.email,
+                    mobile: userFromMobile.mobile,
+                    role: userFromMobile.role,
+                    age: userFromMobile.age,
+                    gender: userFromMobile.gender,
+                    bloodGroup: userFromMobile.bloodGroup,
+                    hobbies: userFromMobile.hobbies,
+                    bio: userFromMobile.bio,
+                    location: userFromMobile.location,
+                    isCompleteProfile: userFromMobile.isCompleteProfile,
+                    notificationSettings: userFromMobile.notificationSettings,
+                    preferredCities: userFromMobile.preferredCities,
+                    profilePic: userFromMobile.profilePic
+                }
             });
         } else {
             return res.status(401).json({
@@ -555,30 +591,46 @@ const verifyEmailOTP = async (req, res) => {
             const refreshToken = jwtUtil.generateRefreshToken(userFromEmail._id);
 
             // update refreshToken in db
-            const updatedUser = await userFromEmail.updateOne({refreshToken: refreshToken});
+            await userFromEmail.updateOne({refreshToken: refreshToken});
             console.log("Login Successfull with OTP : ", userFromEmail);
 
-            // Set HTTP-only cookies
-            res.cookie('accessToken', accessToken, {
+            // Set HTTP-only cookies with proper configuration
+            const cookieOptions = {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === 'production',
-                sameSite: 'lax',
+                sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+                path: '/'
+            };
+
+            res.cookie('accessToken', accessToken, {
+                ...cookieOptions,
                 maxAge: 15 * 60 * 1000 // 15 minutes
             });
 
             res.cookie('refreshToken', refreshToken, {
-                httpOnly: true,
-                secure: process.env.NODE_ENV === 'production',
-                sameSite: 'lax',
+                ...cookieOptions,
                 maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
             });
 
             return res.status(200).json({
-                message: "Login Successfull with Email + OTP",
-                user: updatedUser,
-                tokens: {
-                    accessToken: accessToken,
-                    refreshToken: refreshToken
+                success: true,
+                message: "Login successful",
+                user: {
+                    id: userFromEmail._id,
+                    name: userFromEmail.name,
+                    email: userFromEmail.email,
+                    mobile: userFromEmail.mobile,
+                    role: userFromEmail.role,
+                    age: userFromEmail.age,
+                    gender: userFromEmail.gender,
+                    bloodGroup: userFromEmail.bloodGroup,
+                    hobbies: userFromEmail.hobbies,
+                    bio: userFromEmail.bio,
+                    location: userFromEmail.location,
+                    isCompleteProfile: userFromEmail.isCompleteProfile,
+                    notificationSettings: userFromEmail.notificationSettings,
+                    preferredCities: userFromEmail.preferredCities,
+                    profilePic: userFromEmail.profilePic
                 }
             });
         }  else {
@@ -686,31 +738,47 @@ const verifyMobileOTP = async (req, res) => {
             const refreshToken = jwtUtil.generateRefreshToken(userFromMobile._id);
 
             // update refreshToken in db
-            const updatedUser = await userFromMobile.updateOne({refreshToken: refreshToken});
+            await userFromMobile.updateOne({refreshToken: refreshToken});
 
             console.log("Login Successfull with Mobile + OTP: ", userFromMobile);
 
-            // Set HTTP-only cookies
-            res.cookie('accessToken', accessToken, {
+            // Set HTTP-only cookies with proper configuration
+            const cookieOptions = {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === 'production',
-                sameSite: 'lax',
+                sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+                path: '/'
+            };
+
+            res.cookie('accessToken', accessToken, {
+                ...cookieOptions,
                 maxAge: 15 * 60 * 1000 // 15 minutes
             });
 
             res.cookie('refreshToken', refreshToken, {
-                httpOnly: true,
-                secure: process.env.NODE_ENV === 'production',
-                sameSite: 'lax',
+                ...cookieOptions,
                 maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
             });
 
             return res.status(200).json({
-                message: "Login Successfull with Mobile + OTP",
-                user: user,
-                tokens: {
-                    accessToken: accessToken,
-                    refreshToken: refreshToken
+                success: true,
+                message: "Login successful",
+                user: {
+                    id: userFromMobile._id,
+                    name: userFromMobile.name,
+                    email: userFromMobile.email,
+                    mobile: userFromMobile.mobile,
+                    role: userFromMobile.role,
+                    age: userFromMobile.age,
+                    gender: userFromMobile.gender,
+                    bloodGroup: userFromMobile.bloodGroup,
+                    hobbies: userFromMobile.hobbies,
+                    bio: userFromMobile.bio,
+                    location: userFromMobile.location,
+                    isCompleteProfile: userFromMobile.isCompleteProfile,
+                    notificationSettings: userFromMobile.notificationSettings,
+                    preferredCities: userFromMobile.preferredCities,
+                    profilePic: userFromMobile.profilePic
                 }
             });
         } else {
@@ -893,9 +961,16 @@ const logoutUser = async (req, res) => {
 // Enhanced logout with cookie clearing
 const enhancedLogoutUser = async (req, res) => {
     try {
-        // Clear cookies
-        res.clearCookie('accessToken');
-        res.clearCookie('refreshToken');
+        // Clear cookies with proper options
+        const cookieOptions = {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+            path: '/'
+        };
+
+        res.clearCookie('accessToken', cookieOptions);
+        res.clearCookie('refreshToken', cookieOptions);
 
         res.status(200).json({
             success: true,
