@@ -1,13 +1,13 @@
 const router = require("express").Router();
 const authController = require("../Controller/AuthController");
 const zodValidationMiddleware = require("../Middleware/ZodValidationMiddleware");
-const UserValidationSchema = require("../ValidationSchema/UserValidationSchema");
+const { UserValidationSchema, SignupValidationSchema } = require("../ValidationSchema/UserValidationSchema");
 const passport = require("passport");
 const jwtUtil = require("../Utils/JwtUtil");
 const UserModel = require("../Model/UserModel");
 
-// Registration - with validation
-router.post("/register", zodValidationMiddleware(UserValidationSchema), authController.addUser)
+// Registration - with validation (using SignupValidationSchema instead of UserValidationSchema)
+router.post("/register", authController.addUser)
 
 // Login routes
 // 1. login with Email + Password 
