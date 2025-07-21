@@ -107,7 +107,7 @@ const CitySearchInput = ({ onCitySelect, selectedCity }) => {
       {/* Search Input */}
       <div className="relative">
         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-          <MagnifyingGlassIcon className="h-5 w-5 text-gray-400" />
+          <MagnifyingGlassIcon className="h-5 w-5 text-gray-400 dark:text-gray-500" />
         </div>
         
         <input
@@ -115,7 +115,7 @@ const CitySearchInput = ({ onCitySelect, selectedCity }) => {
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           placeholder="Search for a city..."
-          className="block w-full pl-10 pr-16 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-white shadow-sm"
+          className="block w-full pl-10 pr-16 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 shadow-sm"
         />
         
         <div className="absolute inset-y-0 right-0 flex items-center space-x-1 pr-3">
@@ -123,13 +123,13 @@ const CitySearchInput = ({ onCitySelect, selectedCity }) => {
           <motion.button
             onClick={detectUserLocation}
             disabled={isLoadingLocation}
-            className="p-1 text-gray-400 hover:text-primary-600 transition-colors disabled:opacity-50"
+            className="p-1 text-gray-400 dark:text-gray-500 hover:text-primary-600 dark:hover:text-primary-400 transition-colors disabled:opacity-50"
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
             title="Detect my location"
           >
             {isLoadingLocation ? (
-              <div className="w-5 h-5 border-2 border-gray-300 border-t-primary-600 rounded-full animate-spin" />
+              <div className="w-5 h-5 border-2 border-gray-300 dark:border-gray-600 border-t-primary-600 dark:border-t-primary-400 rounded-full animate-spin" />
             ) : (
               <GlobeAltIcon className="h-5 w-5" />
             )}
@@ -139,7 +139,7 @@ const CitySearchInput = ({ onCitySelect, selectedCity }) => {
           {searchTerm && (
             <motion.button
               onClick={clearSelection}
-              className="p-1 text-gray-400 hover:text-red-600 transition-colors"
+              className="p-1 text-gray-400 dark:text-gray-500 hover:text-red-600 dark:hover:text-red-400 transition-colors"
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
               title="Clear selection"
@@ -157,23 +157,23 @@ const CitySearchInput = ({ onCitySelect, selectedCity }) => {
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className="absolute z-50 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg max-h-60 overflow-y-auto"
+            className="absolute z-50 w-full mt-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg max-h-60 overflow-y-auto"
           >
             {filteredCities.map((city, index) => (
               <motion.button
                 key={`${city.name}-${city.state}`}
                 onClick={() => handleCitySelect(city)}
-                className="w-full px-4 py-3 text-left hover:bg-gray-50 transition-colors border-b border-gray-100 last:border-b-0"
+                className="w-full px-4 py-3 text-left hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors border-b border-gray-100 dark:border-gray-700 last:border-b-0"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: index * 0.05 }}
-                whileHover={{ backgroundColor: '#f9fafb' }}
+                whileHover={{ backgroundColor: 'rgba(249, 250, 251, 0.5)' }}
               >
                 <div className="flex items-center">
-                  <MapPinIcon className="h-4 w-4 text-gray-400 mr-2 flex-shrink-0" />
+                  <MapPinIcon className="h-4 w-4 text-gray-400 dark:text-gray-500 mr-2 flex-shrink-0" />
                   <div>
-                    <div className="font-medium text-gray-900">{city.name}</div>
-                    <div className="text-sm text-gray-500">{city.state}</div>
+                    <div className="font-medium text-gray-900 dark:text-white">{city.name}</div>
+                    <div className="text-sm text-gray-500 dark:text-gray-400">{city.state}</div>
                   </div>
                 </div>
               </motion.button>
@@ -187,11 +187,11 @@ const CitySearchInput = ({ onCitySelect, selectedCity }) => {
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mt-2 p-3 bg-primary-50 border border-primary-200 rounded-lg"
+          className="mt-2 p-3 bg-primary-50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-800/50 rounded-lg"
         >
           <div className="flex items-center">
-            <MapPinIcon className="h-4 w-4 text-primary-600 mr-2" />
-            <span className="text-sm text-primary-800">
+            <MapPinIcon className="h-4 w-4 text-primary-600 dark:text-primary-400 mr-2" />
+            <span className="text-sm text-primary-800 dark:text-primary-200">
               Showing threats for{' '}
               <span className="font-medium">
                 {selectedCity.city || selectedCity.name}
@@ -205,7 +205,7 @@ const CitySearchInput = ({ onCitySelect, selectedCity }) => {
       {/* Quick suggestions */}
       {!searchTerm && !selectedCity && (
         <div className="mt-2">
-          <p className="text-xs text-gray-500 mb-2">Popular cities:</p>
+          <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">Popular cities:</p>
           <div className="flex flex-wrap gap-2">
             {['Delhi', 'Mumbai', 'Bangalore', 'Chennai'].map((cityName) => {
               const city = indianCities.find(c => c.name === cityName);
@@ -213,7 +213,7 @@ const CitySearchInput = ({ onCitySelect, selectedCity }) => {
                 <motion.button
                   key={cityName}
                   onClick={() => handleCitySelect(city)}
-                  className="px-3 py-1 text-xs bg-gray-100 text-gray-700 rounded-full hover:bg-primary-100 hover:text-primary-700 transition-colors"
+                  className="px-3 py-1 text-xs bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-full hover:bg-primary-100 dark:hover:bg-primary-900/30 hover:text-primary-700 dark:hover:text-primary-300 transition-colors"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >

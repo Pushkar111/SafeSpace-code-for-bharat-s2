@@ -153,26 +153,26 @@ const LandingPage = () => {
                 <div className="absolute top-0 -right-4 w-72 h-72 bg-yellow-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-2000"></div>
                 <div className="absolute -bottom-8 left-20 w-72 h-72 bg-pink-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-4000"></div>
                 
-                <div className="relative bg-white rounded-2xl shadow-2xl p-8">
+                <div className="relative bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-8">
                   <div className="text-center">
                     <div className="mx-auto w-16 h-16 bg-primary-600 rounded-2xl flex items-center justify-center mb-4">
                       <ShieldCheckIcon className="w-8 h-8 text-white" />
                     </div>
-                    <h3 className="text-xl font-bold text-gray-900 mb-2">SafeSpace Dashboard</h3>
-                    <p className="text-gray-600 mb-6">Real-time threat intelligence at your fingertips</p>
+                    <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">SafeSpace Dashboard</h3>
+                    <p className="text-gray-600 dark:text-gray-300 mb-6">Real-time threat intelligence at your fingertips</p>
                     
                     <div className="space-y-3 text-left">
-                      <div className="flex items-center justify-between p-3 bg-red-50 rounded-lg">
-                        <span className="text-sm font-medium text-red-800">High Risk Alert</span>
-                        <span className="text-xs text-red-600">Delhi</span>
+                      <div className="flex items-center justify-between p-3 bg-red-50 dark:bg-red-900/20 rounded-lg">
+                        <span className="text-sm font-medium text-red-800 dark:text-red-200">High Risk Alert</span>
+                        <span className="text-xs text-red-600 dark:text-red-400">Delhi</span>
                       </div>
-                      <div className="flex items-center justify-between p-3 bg-yellow-50 rounded-lg">
-                        <span className="text-sm font-medium text-yellow-800">Traffic Disruption</span>
-                        <span className="text-xs text-yellow-600">Mumbai</span>
+                      <div className="flex items-center justify-between p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg">
+                        <span className="text-sm font-medium text-yellow-800 dark:text-yellow-200">Traffic Disruption</span>
+                        <span className="text-xs text-yellow-600 dark:text-yellow-400">Mumbai</span>
                       </div>
-                      <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg">
-                        <span className="text-sm font-medium text-green-800">All Clear</span>
-                        <span className="text-xs text-green-600">Bangalore</span>
+                      <div className="flex items-center justify-between p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
+                        <span className="text-sm font-medium text-green-800 dark:text-green-200">All Clear</span>
+                        <span className="text-xs text-green-600 dark:text-green-400">Bangalore</span>
                       </div>
                     </div>
                   </div>

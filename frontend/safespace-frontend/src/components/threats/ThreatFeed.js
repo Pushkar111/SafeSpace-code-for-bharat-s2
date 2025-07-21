@@ -306,11 +306,11 @@ const loadThreats = useCallback(async (page = 1, append = false) => {
   return (
     <div className="space-y-6">
       {/* Header and filters */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-4 lg:space-y-0">
           <div>
-            <h2 className="text-2xl font-bold text-gray-900">Threat Intelligence Feed</h2>
-            <p className="text-gray-600 mt-1">
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Threat Intelligence Feed</h2>
+            <p className="text-gray-600 dark:text-gray-400 mt-1">
               Real-time safety alerts and AI-powered recommendations
             </p>
           </div>
@@ -318,7 +318,7 @@ const loadThreats = useCallback(async (page = 1, append = false) => {
           <motion.button
             onClick={refreshThreats}
             disabled={isLoading}
-            className="flex items-center space-x-2 bg-primary-600 text-white px-4 py-2 rounded-lg hover:bg-primary-700 transition-colors disabled:opacity-50"
+            className="flex items-center space-x-2 bg-primary-600 dark:bg-primary-500 text-white px-4 py-2 rounded-lg hover:bg-primary-700 dark:hover:bg-primary-600 transition-colors disabled:opacity-50"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
@@ -330,14 +330,14 @@ const loadThreats = useCallback(async (page = 1, append = false) => {
         {/* Filters */}
         <div className="mt-6 flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
           <div className="flex-1">
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               <FunnelIcon className="h-4 w-4 inline mr-1" />
               Category
             </label>
             <select
               value={filterCategory}
               onChange={(e) => setFilterCategory(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
             >
               {categories.map(cat => (
                 <option key={cat.value} value={cat.value}>
@@ -348,13 +348,13 @@ const loadThreats = useCallback(async (page = 1, append = false) => {
           </div>
           
           <div className="flex-1">
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               Risk Level
             </label>
             <select
               value={filterLevel}
               onChange={(e) => setFilterLevel(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
             >
               {riskLevels.map(level => (
                 <option key={level.value} value={level.value}>
@@ -368,11 +368,11 @@ const loadThreats = useCallback(async (page = 1, append = false) => {
 
       {/* Threat count and load more */}
       <div className="flex items-center justify-between">
-        <p className="text-gray-600">
+        <p className="text-gray-600 dark:text-gray-400">
           Showing {filteredThreats.length} of {pagination.total > 0 ? pagination.total : threats.length} threats
           {selectedCity && ` in ${selectedCity.city || selectedCity.name}`}
           {pagination.total > threats.length && (
-            <span className="text-primary-600 ml-2">
+            <span className="text-primary-600 dark:text-primary-400 ml-2">
               ({threats.length} loaded, {pagination.total - threats.length} more available)
             </span>
           )}
@@ -383,7 +383,7 @@ const loadThreats = useCallback(async (page = 1, append = false) => {
           <motion.button
             onClick={() => loadThreats(pagination.page + 1, true)}
             disabled={isLoadingMore}
-            className="flex items-center space-x-2 bg-primary-600 text-white px-4 py-2 rounded-lg hover:bg-primary-700 transition-colors disabled:opacity-50"
+            className="flex items-center space-x-2 bg-primary-600 dark:bg-primary-500 text-white px-4 py-2 rounded-lg hover:bg-primary-700 dark:hover:bg-primary-600 transition-colors disabled:opacity-50"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
@@ -406,8 +406,8 @@ const loadThreats = useCallback(async (page = 1, append = false) => {
       {isLoading && threats.length === 0 && (
         <div className="flex items-center justify-center py-12">
           <div className="text-center">
-            <div className="w-8 h-8 border-4 border-primary-200 border-t-primary-600 rounded-full animate-spin mx-auto mb-4"></div>
-            <p className="text-gray-600">Loading threats...</p>
+            <div className="w-8 h-8 border-4 border-primary-200 dark:border-primary-800 border-t-primary-600 dark:border-t-primary-400 rounded-full animate-spin mx-auto mb-4"></div>
+            <p className="text-gray-600 dark:text-gray-400">Loading threats...</p>
           </div>
         </div>
       )}
@@ -436,8 +436,8 @@ const loadThreats = useCallback(async (page = 1, append = false) => {
           className="text-center py-12"
         >
           <div className="text-6xl mb-4">🔍</div>
-          <h3 className="text-lg font-medium text-gray-900 mb-2">No threats found</h3>
-          <p className="text-gray-600">
+          <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">No threats found</h3>
+          <p className="text-gray-600 dark:text-gray-400">
             Try adjusting your filters or check back later for updates.
           </p>
         </motion.div>
@@ -451,8 +451,8 @@ const loadThreats = useCallback(async (page = 1, append = false) => {
           className="text-center py-12"
         >
           <div className="text-6xl mb-4">📡</div>
-          <h3 className="text-lg font-medium text-gray-900 mb-2">No threat data available</h3>
-          <p className="text-gray-600">
+          <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">No threat data available</h3>
+          <p className="text-gray-600 dark:text-gray-400">
             Unable to fetch threat data at the moment. Please try again later.
           </p>
         </motion.div>

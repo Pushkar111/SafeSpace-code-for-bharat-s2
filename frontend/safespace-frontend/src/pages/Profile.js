@@ -132,7 +132,7 @@ const Profile = () => {
 
     const getUserStats = () => ({
         threatsViewed: 47,
-        threatsSaved: savedThreats.length,
+        threatsSaved: savedThreats?.length,
         accountAge: "2 months",
         lastActive: "Today",
     });
@@ -355,7 +355,7 @@ const Profile = () => {
                                     <div>
                                         <label className="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Hobbies</label>
                                         <p className="text-gray-900 dark:text-white">
-                                            {user?.hobbies && Array.isArray(user.hobbies) && user.hobbies.length > 0 
+                                            {user?.hobbies && Array.isArray(user.hobbies) && user.hobbies?.length > 0 
                                                 ? user.hobbies.join(", ") 
                                                 : "Not specified"}
                                         </p>
@@ -523,7 +523,7 @@ const Profile = () => {
                     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
                         <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-6 flex items-center">
                             <StarIcon className="h-5 w-5 mr-2" />
-                            Saved Threats ({savedThreats.length})
+                            Saved Threats ({savedThreats?.length})
                         </h2>
 
                         {isLoading ? (
@@ -531,7 +531,7 @@ const Profile = () => {
                                 <div className="w-8 h-8 border-4 border-primary-200 border-t-primary-600 rounded-full animate-spin mx-auto mb-4"></div>
                                 <p className="text-gray-600 dark:text-gray-400">Loading saved threats...</p>
                             </div>
-                        ) : savedThreats.length > 0 ? (
+                        ) : savedThreats?.length > 0 ? (
                             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 lg:gap-6">
                                 {savedThreats.map((threat, index) => (
                                     <ThreatCard
