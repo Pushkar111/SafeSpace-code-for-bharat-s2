@@ -61,6 +61,7 @@ export const AuthProvider = ({ children }) => {
   const login = async (email, password) => {
     try {
       setIsLoading(true);
+      console.log('Login attempt:', { email, apiUrl: process.env.REACT_APP_API_URL }); // Debug log
       const response = await loginUser(email, password);
       
       if (response.success) {
@@ -69,11 +70,13 @@ export const AuthProvider = ({ children }) => {
         toast.success('Welcome back! 🎉');
         return { success: true };
       } else {
+        console.error('Login failed:', response.message); // Debug log
         toast.error(response.message || 'Login failed');
         return { success: false, error: response.message };
       }
     } catch (error) {
-      const message = error.response?.data?.message || 'Login failed';
+      console.error('Login error:', error); // Debug log
+      const message = error.response?.data?.message || error.message || 'Login failed';
       toast.error(message);
       return { success: false, error: message };
     } finally {
