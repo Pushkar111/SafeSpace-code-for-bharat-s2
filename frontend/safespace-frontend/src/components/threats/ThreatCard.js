@@ -71,7 +71,7 @@ const ThreatCard = ({ threat, onClick, onSave, isSaved = false, isRemoving = fal
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, delay: index * 0.1 }}
-            className="bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-200 cursor-pointer border border-gray-200 overflow-hidden group"
+            className="bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 cursor-pointer border border-gray-200 dark:border-gray-700 overflow-hidden group"
             onClick={() => onClick?.(threat)}
             whileHover={{ y: -2 }}
             whileTap={{ scale: 0.98 }}>
@@ -95,7 +95,7 @@ const ThreatCard = ({ threat, onClick, onSave, isSaved = false, isRemoving = fal
                         className={`p-1 rounded-full transition-colors ${
                             isRemoving 
                                 ? 'cursor-not-allowed opacity-50' 
-                                : 'hover:bg-gray-100 cursor-pointer'
+                                : 'hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer'
                         }`}
                         whileHover={isRemoving ? {} : { scale: 1.1 }}
                         whileTap={isRemoving ? {} : { scale: 0.9 }}
@@ -109,20 +109,20 @@ const ThreatCard = ({ threat, onClick, onSave, isSaved = false, isRemoving = fal
                         }
                     >
                         {isRemoving ? (
-                            <div className="h-5 w-5 border-2 border-gray-300 border-t-yellow-500 rounded-full animate-spin" />
+                            <div className="h-5 w-5 border-2 border-gray-300 dark:border-gray-600 border-t-yellow-500 dark:border-t-yellow-400 rounded-full animate-spin" />
                         ) : isSaved ? (
                             <StarIconSolid className="h-5 w-5 text-yellow-500" />
                         ) : (
-                            <StarIcon className="h-5 w-5 text-gray-400 group-hover:text-yellow-500" />
+                            <StarIcon className="h-5 w-5 text-gray-400 dark:text-gray-500 group-hover:text-yellow-500" />
                         )}
                     </motion.button>
                 </div>
 
                 {/* Title */}
-                <h4 className="text-lg font-semibold text-gray-900 mb-2 line-clamp-2">{threat.title}</h4>
+                <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-2 line-clamp-2">{threat.title}</h4>
 
                 {/* Location and time */}
-                <div className="flex items-center justify-between text-sm text-gray-600 mb-3">
+                <div className="flex items-center justify-between text-sm text-gray-600 dark:text-gray-400 mb-3">
                     <div className="flex items-center">
                         <MapPinIcon className="h-4 w-4 mr-1" />
                         <span>{threat.location || "Unknown Location"}</span>
@@ -134,18 +134,18 @@ const ThreatCard = ({ threat, onClick, onSave, isSaved = false, isRemoving = fal
                 </div>
 
                 {/* Summary */}
-                <p className="text-gray-700 text-sm line-clamp-3 mb-4">{getDescription() || "No description available"}</p>
+                <p className="text-gray-700 dark:text-gray-300 text-sm line-clamp-3 mb-4">{getDescription() || "No description available"}</p>
             </div>
 
             {/* Footer */}
-            <div className="px-4 py-3 bg-gray-50 border-t border-gray-100">
+            <div className="px-4 py-3 bg-gray-50 dark:bg-gray-800/50 border-t border-gray-100 dark:border-gray-700">
                 <div className="flex items-center justify-between">
-                    <div className="flex items-center text-xs text-gray-500">
+                    <div className="flex items-center text-xs text-gray-500 dark:text-gray-400">
                         <ExclamationTriangleIcon className="h-4 w-4 mr-1" />
                         <span>{threat.affectedPeople || 0} people affected</span>
                     </div>
 
-                    <motion.div className="flex items-center text-primary-600 text-sm font-medium group-hover:text-primary-700" whileHover={{ x: 2 }}>
+                    <motion.div className="flex items-center text-primary-600 dark:text-primary-400 text-sm font-medium group-hover:text-primary-700 dark:group-hover:text-primary-300" whileHover={{ x: 2 }}>
                         <InformationCircleIcon className="h-4 w-4 mr-1" />
                         <span>View AI Advice</span>
                     </motion.div>
@@ -153,7 +153,7 @@ const ThreatCard = ({ threat, onClick, onSave, isSaved = false, isRemoving = fal
             </div>
 
             {/* Hover effect overlay */}
-            <div className="absolute inset-0 bg-primary-600 opacity-0 group-hover:opacity-5 transition-opacity duration-200 pointer-events-none" />
+            <div className="absolute inset-0 bg-primary-600 dark:bg-primary-500 opacity-0 group-hover:opacity-5 transition-opacity duration-200 pointer-events-none" />
         </motion.div>
     );
 };

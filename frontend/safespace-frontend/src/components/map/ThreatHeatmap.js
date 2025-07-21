@@ -477,17 +477,17 @@ const ThreatHeatmap = ({ onCitySelect, selectedCity }) => {
 
     if (isLoading) {
         return (
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="h-[600px] bg-gradient-to-br from-blue-50 to-indigo-100 rounded-xl flex items-center justify-center">
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="h-[600px] bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-blue-900/20 dark:to-indigo-900/40 rounded-xl flex items-center justify-center">
                 <div className="text-center">
                     <motion.div
-                        className="w-12 h-12 border-4 border-blue-200 border-t-blue-600 rounded-full mx-auto mb-4"
+                        className="w-12 h-12 border-4 border-blue-200 dark:border-blue-700 border-t-blue-600 dark:border-t-blue-400 rounded-full mx-auto mb-4"
                         animate={{ rotate: 360 }}
                         transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
                     />
-                    <motion.p className="text-blue-800 font-medium text-lg" animate={{ opacity: [0.5, 1, 0.5] }} transition={{ duration: 2, repeat: Infinity }}>
+                    <motion.p className="text-blue-800 dark:text-blue-200 font-medium text-lg" animate={{ opacity: [0.5, 1, 0.5] }} transition={{ duration: 2, repeat: Infinity }}>
                         🇮🇳 Loading India Threat Map...
                     </motion.p>
-                    <p className="text-blue-600 text-sm mt-2">Fetching real-time threat data</p>
+                    <p className="text-blue-600 dark:text-blue-400 text-sm mt-2">Fetching real-time threat data</p>
                 </div>
             </motion.div>
         );
@@ -498,17 +498,17 @@ const ThreatHeatmap = ({ onCitySelect, selectedCity }) => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: "easeOut" }}
-            className="bg-white rounded-xl shadow-2xl overflow-hidden border border-gray-100">
+            className="bg-white dark:bg-gray-800 rounded-xl shadow-2xl overflow-hidden border border-gray-100 dark:border-gray-700">
             {/* Enhanced Header */}
-            <div className="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 p-6 text-white">
+            <div className="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 dark:from-blue-700 dark:via-indigo-700 dark:to-purple-700 p-6 text-white">
                 <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-3">
-                        <div className="p-2 bg-white/20 rounded-lg backdrop-blur-sm">
+                        <div className="p-2 bg-white/20 dark:bg-white/10 rounded-lg backdrop-blur-sm">
                             <MapIcon className="h-6 w-6" />
                         </div>
                         <div>
                             <h3 className="text-xl font-bold flex items-center">🇮🇳 India Real-Time Threat Map</h3>
-                            <p className="text-blue-100 text-sm">
+                            <p className="text-blue-100 dark:text-blue-200 text-sm">
                                 Live monitoring of {threatStats.total} cities • {threatStats.totalThreats} active threats
                             </p>
                         </div>
@@ -518,7 +518,7 @@ const ThreatHeatmap = ({ onCitySelect, selectedCity }) => {
                     <div className="flex items-center space-x-3">
                         <motion.button
                             onClick={() => setShowHeatCircles(!showHeatCircles)}
-                            className="p-2 bg-white/20 rounded-lg hover:bg-white/30 transition-colors"
+                            className="p-2 bg-white/20 dark:bg-white/10 rounded-lg hover:bg-white/30 dark:hover:bg-white/20 transition-colors"
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
                             title="Toggle Heat Circles">
@@ -528,7 +528,7 @@ const ThreatHeatmap = ({ onCitySelect, selectedCity }) => {
                         <motion.button
                             onClick={refreshThreatData}
                             disabled={isLoading}
-                            className="flex items-center space-x-2 px-4 py-2 bg-white/20 rounded-lg hover:bg-white/30 transition-colors disabled:opacity-50"
+                            className="flex items-center space-x-2 px-4 py-2 bg-white/20 dark:bg-white/10 rounded-lg hover:bg-white/30 dark:hover:bg-white/20 transition-colors disabled:opacity-50"
                             whileHover={isLoading ? {} : { scale: 1.05 }}
                             whileTap={isLoading ? {} : { scale: 0.95 }}>
                             <ArrowPathIcon className={`h-4 w-4 ${isLoading ? "animate-spin" : ""}`} />
@@ -539,35 +539,35 @@ const ThreatHeatmap = ({ onCitySelect, selectedCity }) => {
 
                 {/* Threat Statistics */}
                 <div className="grid grid-cols-4 gap-4 mt-4">
-                    <div className="bg-white/10 rounded-lg p-3 backdrop-blur-sm">
+                    <div className="bg-white/10 dark:bg-white/5 rounded-lg p-3 backdrop-blur-sm">
                         <div className="text-2xl font-bold">{threatStats.high}</div>
-                        <div className="text-red-200 text-sm">🔴 High Risk</div>
+                        <div className="text-red-200 dark:text-red-300 text-sm">🔴 High Risk</div>
                     </div>
-                    <div className="bg-white/10 rounded-lg p-3 backdrop-blur-sm">
+                    <div className="bg-white/10 dark:bg-white/5 rounded-lg p-3 backdrop-blur-sm">
                         <div className="text-2xl font-bold">{threatStats.medium}</div>
-                        <div className="text-yellow-200 text-sm">🟡 Medium Risk</div>
+                        <div className="text-yellow-200 dark:text-yellow-300 text-sm">🟡 Medium Risk</div>
                     </div>
-                    <div className="bg-white/10 rounded-lg p-3 backdrop-blur-sm">
+                    <div className="bg-white/10 dark:bg-white/5 rounded-lg p-3 backdrop-blur-sm">
                         <div className="text-2xl font-bold">{threatStats.low}</div>
-                        <div className="text-green-200 text-sm">🟢 Low Risk</div>
+                        <div className="text-green-200 dark:text-green-300 text-sm">🟢 Low Risk</div>
                     </div>
-                    <div className="bg-white/10 rounded-lg p-3 backdrop-blur-sm">
+                    <div className="bg-white/10 dark:bg-white/5 rounded-lg p-3 backdrop-blur-sm">
                         <div className="text-2xl font-bold">{threatStats.total}</div>
-                        <div className="text-blue-200 text-sm">🏙️ Cities</div>
+                        <div className="text-blue-200 dark:text-blue-300 text-sm">🏙️ Cities</div>
                     </div>
                 </div>
             </div>
 
             {/* Map Controls Panel */}
-            <div className="p-4 bg-gray-50 border-b">
+            <div className="p-4 bg-gray-50 dark:bg-gray-800/50 border-b border-gray-200 dark:border-gray-700">
                 <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-4">
                         <div className="flex items-center space-x-2">
-                            <span className="text-sm font-medium text-gray-700">Map Style:</span>
+                            <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Map Style:</span>
                             <select
                                 value={mapStyle}
                                 onChange={(e) => handleMapStyleChange(e.target.value)}
-                                className="px-3 py-1 border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                className="px-3 py-1 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-md text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                                 <option value="light">🌞 Light</option>
                                 <option value="dark">🌙 Dark</option>
                                 <option value="satellite">🛰️ Satellite</option>
@@ -576,11 +576,11 @@ const ThreatHeatmap = ({ onCitySelect, selectedCity }) => {
                         </div>
 
                         <div className="flex items-center space-x-2">
-                            <span className="text-sm font-medium text-gray-700">Filter:</span>
+                            <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Filter:</span>
                             <select
                                 value={selectedThreatLevel}
                                 onChange={(e) => setSelectedThreatLevel(e.target.value)}
-                                className="px-3 py-1 border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                className="px-3 py-1 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-md text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                                 <option value="all">All Threats ({threatStats.total})</option>
                                 <option value="high">🔴 High Risk ({threatStats.high})</option>
                                 <option value="medium">🟡 Medium Risk ({threatStats.medium})</option>
@@ -589,7 +589,7 @@ const ThreatHeatmap = ({ onCitySelect, selectedCity }) => {
                         </div>
                     </div>
 
-                    {lastUpdated && <div className="text-sm text-gray-600">Last updated: {new Date(lastUpdated).toLocaleTimeString("en-IN")}</div>}
+                    {lastUpdated && <div className="text-sm text-gray-600 dark:text-gray-400">Last updated: {new Date(lastUpdated).toLocaleTimeString("en-IN")}</div>}
                 </div>
             </div>
 

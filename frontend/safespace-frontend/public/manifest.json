@@ -1,6 +1,7 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "SafeSpace",
+  "name": "SafeSpace - AI Monitored Safety App",
+  "description": "Real-time threat intelligence and AI-powered safety recommendations for Indian cities",
   "icons": [
     {
       "src": "favicon.ico",
@@ -10,16 +11,24 @@
     {
       "src": "logo192.png",
       "type": "image/png",
-      "sizes": "192x192"
+      "sizes": "192x192",
+      "purpose": "any maskable"
     },
     {
       "src": "logo512.png",
       "type": "image/png",
-      "sizes": "512x512"
+      "sizes": "512x512",
+      "purpose": "any maskable"
     }
   ],
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "orientation": "portrait-primary",
+  "theme_color": "#0284c7",
+  "background_color": "#f8fafc",
+  "categories": ["safety", "utilities", "navigation"],
+  "lang": "en",
+  "scope": "/",
+  "display_override": ["window-controls-overlay", "standalone", "fullscreen"],
+  "prefer_related_applications": false
 }

@@ -1,0 +1,227 @@
+/* Mobile-specific optimizations for SafeSpace */
+
+/* Fix iOS viewport issues */
+@supports (-webkit-touch-callout: none) {
+  .mobile-vh-fix {
+    height: -webkit-fill-available;
+  }
+}
+
+/* Use CSS custom properties for dynamic viewport height */
+:root {
+  --vh: 1vh;
+}
+
+.full-height-mobile {
+  min-height: 100vh;
+  min-height: calc(var(--vh, 1vh) * 100);
+}
+
+/* Improve touch targets on mobile */
+@media (max-width: 768px) {
+  /* Ensure minimum touch target size */
+  button,
+  [role="button"],
+  .btn,
+  .touch-target,
+  input[type="submit"],
+  input[type="button"] {
+    min-height: 44px !important;
+    min-width: 44px !important;
+    padding: 12px 16px !important;
+    touch-action: manipulation;
+  }
+
+  /* Fix modal positioning on mobile */
+  .modal-mobile {
+    margin: 0 !important;
+    max-height: 100vh !important;
+    max-height: calc(var(--vh, 1vh) * 100) !important;
+    border-radius: 0 !important;
+  }
+
+  /* Prevent zoom on input focus for iOS */
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="tel"],
+  input[type="number"],
+  select,
+  textarea {
+    font-size: 16px !important;
+    transform: translateZ(0);
+    -webkit-appearance: none;
+    appearance: none;
+    border-radius: 8px;
+    background-clip: padding-box;
+  }
+
+  /* Fix navbar positioning issues */
+  .navbar-mobile {
+    position: sticky !important;
+    top: 0;
+    z-index: 1000;
+  }
+
+  /* Improve scrolling performance */
+  .scroll-container {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+  }
+
+  /* Fix animation performance on mobile */
+  .mobile-animation {
+    will-change: transform;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    transform: translateZ(0);
+  }
+
+  /* Improve text rendering */
+  body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Better touch feedback */
+  .touch-device button:active,
+  .touch-device [role="button"]:active {
+    transform: scale(0.98);
+    transition: transform 0.1s ease-out;
+  }
+}
+
+/* Landscape mobile optimizations */
+@media screen and (max-height: 500px) and (orientation: landscape) {
+  .mobile-landscape-compact {
+    padding-top: 8px !important;
+    padding-bottom: 8px !important;
+  }
+  
+  .navbar-mobile {
+    padding: 8px 16px !important;
+  }
+
+  .full-height-mobile {
+    min-height: 100vh;
+    min-height: calc(var(--vh, 1vh) * 100);
+  }
+}
+
+/* Specific fixes for very small screens */
+@media (max-width: 375px) {
+  .mobile-xs-text {
+    font-size: 14px !important;
+  }
+  
+  .mobile-xs-padding {
+    padding: 8px !important;
+  }
+  
+  .mobile-xs-margin {
+    margin: 4px !important;
+  }
+
+  /* Compact spacing for very small screens */
+  .navbar-mobile {
+    padding: 8px 12px !important;
+  }
+
+  button,
+  [role="button"] {
+    font-size: 14px !important;
+  }
+}
+
+/* Fix for Android Chrome address bar */
+@media screen and (max-width: 768px) {
+  .full-height-mobile {
+    min-height: 100vh;
+    min-height: calc(var(--vh, 1vh) * 100);
+  }
+
+  /* Prevent horizontal scrolling */
+  body, html {
+    overflow-x: hidden !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+}
+
+/* Improve performance for animations on mobile */
+@media (prefers-reduced-motion: no-preference) {
+  .mobile-animation-optimized {
+    animation-duration: 0.3s;
+    transition-duration: 0.3s;
+  }
+}
+
+/* Reduce motion for better performance */
+@media (prefers-reduced-motion: reduce) {
+  .reduced-motion * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* High contrast mode for better mobile visibility */
+@media (prefers-contrast: high) {
+  .mobile-high-contrast {
+    border: 2px solid currentColor !important;
+  }
+}
+
+/* Touch-friendly hover states */
+@media (hover: none) and (pointer: coarse) {
+  .mobile-touch:hover {
+    transform: scale(0.98);
+    transition: transform 0.1s ease-out;
+  }
+
+  /* Remove hover effects that don't work well on touch */
+  .desktop-hover:hover {
+    transform: none !important;
+    scale: none !important;
+  }
+}
+
+/* Safe area handling for notched devices */
+.safe-area-top {
+  padding-top: env(safe-area-inset-top);
+}
+
+.safe-area-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.safe-area-left {
+  padding-left: env(safe-area-inset-left);
+}
+
+.safe-area-right {
+  padding-right: env(safe-area-inset-right);
+}
+
+/* Fix for mobile Safari bounce effect */
+body {
+  overscroll-behavior: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Improve tap targets and touch responsiveness */
+@media (pointer: coarse) {
+  a, button, [role="button"], input, select, textarea {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+
+/* Fix sticky positioning issues on mobile */
+@supports (-webkit-touch-callout: none) {
+  .sticky-mobile {
+    position: -webkit-sticky;
+    position: sticky;
+  }
+}

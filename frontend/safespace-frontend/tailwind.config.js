@@ -6,6 +6,13 @@ module.exports = {
   darkMode: 'class', // Enable dark mode with class strategy
   theme: {
     extend: {
+      screens: {
+        'xs': '475px',
+        'mobile': '640px',
+        'tablet': '768px',
+        'laptop': '1024px',
+        'desktop': '1280px',
+      },
       colors: {
         primary: {
           50: '#f0f9ff',
@@ -60,6 +67,7 @@ module.exports = {
         'fade-in': 'fadeIn 0.5s ease-in-out',
         'slide-up': 'slideUp 0.3s ease-out',
         'pulse-soft': 'pulseSoft 2s infinite',
+        'mobile-bounce': 'mobileBounce 0.6s ease-out',
       },
       keyframes: {
         fadeIn: {
@@ -74,6 +82,23 @@ module.exports = {
           '0%, 100%': { opacity: '1' },
           '50%': { opacity: '0.8' },
         },
+        mobileBounce: {
+          '0%': { transform: 'scale(0.95)', opacity: '0' },
+          '50%': { transform: 'scale(1.02)', opacity: '0.8' },
+          '100%': { transform: 'scale(1)', opacity: '1' },
+        },
+      },
+      spacing: {
+        'safe-top': 'env(safe-area-inset-top)',
+        'safe-bottom': 'env(safe-area-inset-bottom)',
+        'safe-left': 'env(safe-area-inset-left)',
+        'safe-right': 'env(safe-area-inset-right)',
+      },
+      minHeight: {
+        'touch': '44px',
+      },
+      minWidth: {
+        'touch': '44px',
       },
     },
   },

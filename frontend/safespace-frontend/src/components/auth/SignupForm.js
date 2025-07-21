@@ -66,7 +66,7 @@ const SignupForm = () => {
       case 5:
         return 'bg-green-500';
       default:
-        return 'bg-gray-300';
+        return 'bg-gray-300 dark:bg-gray-600';
     }
   };
 

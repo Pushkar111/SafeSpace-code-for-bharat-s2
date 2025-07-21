@@ -6,7 +6,8 @@ import {
   MapPinIcon,
   CameraIcon,
   EyeIcon,
-  EyeSlashIcon
+  EyeSlashIcon,
+  CogIcon
 } from '@heroicons/react/24/outline';
 import Modal from '../ui/Modal';
 import { useAuth } from '../../context/AuthContext';
@@ -281,42 +282,79 @@ const ProfileModal = ({ isOpen, onClose, initialTab = 'profile' }) => {
       isOpen={isOpen}
       onClose={onClose}
       title="Account Settings"
-      size="lg"
+      size="xl"
+      className="max-h-[95vh] overflow-hidden"
     >
-      <div className="flex flex-col md:flex-row min-h-[500px]">
-        {/* Sidebar */}
-        <div className="w-full md:w-64 bg-gray-50 dark:bg-gray-800 p-4 space-y-2 md:min-h-full">
-          {tabs.map((tab) => {
-            const Icon = tab.icon;
-            return (
-              <motion.button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`
-                  w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-left transition-colors
-                  ${activeTab === tab.id
-                    ? 'bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300'
-                    : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'
-                  }
-                `}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                <Icon className="h-5 w-5" />
-                <span className="font-medium">{tab.label}</span>
-              </motion.button>
-            );
-          })}
+      <div className="flex flex-col lg:flex-row min-h-[400px] sm:min-h-[500px] lg:min-h-[600px]">
+        {/* Sidebar - Responsive tabs */}
+        <div className="w-full lg:w-64 bg-gray-50 dark:bg-gray-800/50 border-b lg:border-b-0 lg:border-r border-gray-200 dark:border-gray-700">
+          {/* Mobile: Horizontal scroll tabs */}
+          <div className="lg:hidden">
+            <div className="flex overflow-x-auto scrollbar-hide p-2 space-x-1">
+              {tabs.map((tab) => {
+                const Icon = tab.icon;
+                return (
+                  <motion.button
+                    key={tab.id}
+                    onClick={() => setActiveTab(tab.id)}
+                    className={`
+                      flex-shrink-0 flex flex-col items-center space-y-1 px-3 py-2 rounded-lg text-xs font-medium transition-colors min-w-[80px]
+                      ${activeTab === tab.id
+                        ? 'bg-primary-100 dark:bg-primary-900/50 text-primary-700 dark:text-primary-300 border border-primary-200 dark:border-primary-700'
+                        : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700/50'
+                      }
+                    `}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    <Icon className="h-4 w-4" />
+                    <span>{tab.label}</span>
+                  </motion.button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Desktop: Vertical tabs */}
+          <div className="hidden lg:block p-4 space-y-2">
+            {tabs.map((tab) => {
+              const Icon = tab.icon;
+              return (
+                <motion.button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`
+                    w-full flex items-center space-x-3 px-3 py-3 rounded-xl text-left transition-colors font-medium
+                    ${activeTab === tab.id
+                      ? 'bg-primary-100 dark:bg-primary-900/50 text-primary-700 dark:text-primary-300 border border-primary-200 dark:border-primary-700'
+                      : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700/50'
+                    }
+                  `}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <Icon className="h-5 w-5" />
+                  <span>{tab.label}</span>
+                </motion.button>
+              );
+            })}
+          </div>
         </div>
 
         {/* Content */}
-        <div className="flex-1 p-4 md:p-6 overflow-y-auto">
-          {/* Profile Tab */}
+        <div className="flex-1 overflow-y-auto scroll-container">
+          <div className="p-3 sm:p-4 lg:p-6">{/* Profile Tab */}
           {activeTab === 'profile' && (
-            <form onSubmit={handleProfileUpdate} className="space-y-6">
+            <motion.form 
+              onSubmit={handleProfileUpdate} 
+              className="space-y-4 sm:space-y-6"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+            >
+              {/* Profile Picture */}
               <div className="text-center">
                 <div className="relative inline-block">
-                  <div className="w-24 h-24 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center overflow-hidden">
+                  <div className="w-20 h-20 sm:w-24 sm:h-24 lg:w-28 lg:h-28 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center overflow-hidden border-4 border-white dark:border-gray-600 shadow-lg">
                     {formData.avatar ? (
                       <img 
                         src={formData.avatar} 
@@ -324,11 +362,11 @@ const ProfileModal = ({ isOpen, onClose, initialTab = 'profile' }) => {
                         className="w-full h-full object-cover"
                       />
                     ) : (
-                      <UserCircleIcon className="w-16 h-16 text-gray-400" />
+                      <UserCircleIcon className="w-12 h-12 sm:w-16 sm:h-16 lg:w-20 lg:h-20 text-gray-400 dark:text-gray-500" />
                     )}
                   </div>
-                  <label className="absolute bottom-0 right-0 bg-primary-600 rounded-full p-2 cursor-pointer hover:bg-primary-700 transition-colors">
-                    <CameraIcon className="w-4 h-4 text-white" />
+                  <label className="absolute bottom-0 right-0 bg-primary-600 dark:bg-primary-500 rounded-full p-2 cursor-pointer hover:bg-primary-700 dark:hover:bg-primary-600 transition-colors shadow-lg min-w-touch min-h-touch flex items-center justify-center">
+                    <CameraIcon className="w-3 h-3 sm:w-4 sm:h-4 text-white" />
                     <input
                       type="file"
                       accept="image/*"
@@ -338,38 +376,44 @@ const ProfileModal = ({ isOpen, onClose, initialTab = 'profile' }) => {
                     />
                   </label>
                 </div>
+                <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mt-2">
+                  Click the camera icon to change your profile picture
+                </p>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
+              {/* Form Fields */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                <div className="sm:col-span-2 lg:col-span-1">
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    Full Name
+                    Full Name *
                   </label>
                   <input
                     type="text"
                     name="name"
                     value={formData.name}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:text-white"
                     required
+                    className="w-full px-3 py-2 sm:py-3 border border-gray-300 dark:border-gray-600 rounded-lg sm:rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:text-white transition-colors text-sm sm:text-base"
+                    placeholder="Enter your full name"
                   />
                 </div>
 
-                <div>
+                <div className="sm:col-span-2 lg:col-span-1">
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    Email
+                    Email Address
                   </label>
                   <input
                     type="email"
                     name="email"
                     value={formData.email}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-100 dark:bg-gray-600 text-gray-500 dark:text-gray-400"
                     disabled
+                    className="w-full px-3 py-2 sm:py-3 border border-gray-300 dark:border-gray-600 rounded-lg sm:rounded-xl bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 cursor-not-allowed text-sm sm:text-base"
+                    placeholder="Email cannot be changed"
                   />
                 </div>
 
-                <div>
+                <div className="sm:col-span-2 lg:col-span-1">
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                     Mobile Number
                   </label>
@@ -379,7 +423,7 @@ const ProfileModal = ({ isOpen, onClose, initialTab = 'profile' }) => {
                     value={formData.mobile}
                     onChange={handleInputChange}
                     placeholder="Enter your mobile number"
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:text-white"
+                    className="w-full px-3 py-2 sm:py-3 border border-gray-300 dark:border-gray-600 rounded-lg sm:rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:text-white text-sm sm:text-base"
                   />
                 </div>
 
@@ -395,7 +439,7 @@ const ProfileModal = ({ isOpen, onClose, initialTab = 'profile' }) => {
                     min="1"
                     max="120"
                     placeholder="Enter your age"
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:text-white"
+                    className="w-full px-3 py-2 sm:py-3 border border-gray-300 dark:border-gray-600 rounded-lg sm:rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:text-white text-sm sm:text-base"
                   />
                 </div>
 
@@ -407,7 +451,7 @@ const ProfileModal = ({ isOpen, onClose, initialTab = 'profile' }) => {
                     name="gender"
                     value={formData.gender}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:text-white"
+                    className="w-full px-3 py-2 sm:py-3 border border-gray-300 dark:border-gray-600 rounded-lg sm:rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:text-white text-sm sm:text-base"
                   >
                     <option value="">Select Gender</option>
                     <option value="male">Male</option>
@@ -425,7 +469,7 @@ const ProfileModal = ({ isOpen, onClose, initialTab = 'profile' }) => {
                     name="bloodGroup"
                     value={formData.bloodGroup}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:text-white"
+                    className="w-full px-3 py-2 sm:py-3 border border-gray-300 dark:border-gray-600 rounded-lg sm:rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:text-white text-sm sm:text-base"
                   >
                     <option value="">Select Blood Group</option>
                     <option value="A+">A+</option>
@@ -438,10 +482,8 @@ const ProfileModal = ({ isOpen, onClose, initialTab = 'profile' }) => {
                     <option value="O-">O-</option>
                   </select>
                 </div>
-              </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
+                <div className="sm:col-span-2">
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                     Hobbies
                   </label>
@@ -451,14 +493,14 @@ const ProfileModal = ({ isOpen, onClose, initialTab = 'profile' }) => {
                     value={Array.isArray(formData.hobbies) ? formData.hobbies.join(', ') : formData.hobbies}
                     onChange={(e) => handleArrayInputChange('hobbies', e.target.value)}
                     placeholder="Enter hobbies separated by commas"
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:text-white"
+                    className="w-full px-3 py-2 sm:py-3 border border-gray-300 dark:border-gray-600 rounded-lg sm:rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:text-white text-sm sm:text-base"
                   />
                   <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                     Separate multiple hobbies with commas
                   </p>
                 </div>
 
-                <div>
+                <div className="sm:col-span-2">
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                     Preferred Cities
                   </label>
@@ -468,68 +510,82 @@ const ProfileModal = ({ isOpen, onClose, initialTab = 'profile' }) => {
                     value={Array.isArray(formData.preferredCities) ? formData.preferredCities.join(', ') : formData.preferredCities}
                     onChange={(e) => handleArrayInputChange('preferredCities', e.target.value)}
                     placeholder="Enter preferred cities separated by commas"
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:text-white"
+                    className="w-full px-3 py-2 sm:py-3 border border-gray-300 dark:border-gray-600 rounded-lg sm:rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:text-white text-sm sm:text-base"
                   />
                   <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                     Separate multiple cities with commas
                   </p>
                 </div>
+
+                <div className="sm:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    Location
+                  </label>
+                  <input
+                    type="text"
+                    name="location"
+                    value={formData.location}
+                    onChange={handleInputChange}
+                    placeholder="Enter your city or location"
+                    className="w-full px-3 py-2 sm:py-3 border border-gray-300 dark:border-gray-600 rounded-lg sm:rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:text-white text-sm sm:text-base"
+                  />
+                </div>
+
+                <div className="sm:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    Bio
+                  </label>
+                  <textarea
+                    name="bio"
+                    value={formData.bio}
+                    onChange={handleInputChange}
+                    rows={3}
+                    placeholder="Tell us about yourself..."
+                    className="w-full px-3 py-2 sm:py-3 border border-gray-300 dark:border-gray-600 rounded-lg sm:rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:text-white text-sm sm:text-base resize-none"
+                  />
+                </div>
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Location
-                </label>
-                <input
-                  type="text"
-                  name="location"
-                  value={formData.location}
-                  onChange={handleInputChange}
-                  placeholder="Enter your city or location"
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:text-white"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Bio
-                </label>
-                <textarea
-                  name="bio"
-                  value={formData.bio}
-                  onChange={handleInputChange}
-                  rows={3}
-                  placeholder="Tell us about yourself..."
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:text-white"
-                />
-              </div>
-
-              <div className="flex justify-end">
+              <div className="flex flex-col sm:flex-row justify-end space-y-2 sm:space-y-0 sm:space-x-3 pt-4 border-t border-gray-200 dark:border-gray-700">
+                <motion.button
+                  type="button"
+                  onClick={onClose}
+                  className="w-full sm:w-auto px-4 py-2 sm:px-6 sm:py-3 text-sm sm:text-base font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg sm:rounded-xl hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors min-h-touch"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  Cancel
+                </motion.button>
                 <motion.button
                   type="submit"
                   disabled={loading}
-                  className="px-6 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
+                  className="w-full sm:w-auto px-4 py-2 sm:px-6 sm:py-3 text-sm sm:text-base font-medium bg-primary-600 dark:bg-primary-500 text-white rounded-lg sm:rounded-xl hover:bg-primary-700 dark:hover:bg-primary-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors min-h-touch"
+                  whileHover={{ scale: loading ? 1 : 1.02 }}
+                  whileTap={{ scale: loading ? 1 : 0.98 }}
                 >
                   {loading ? 'Saving...' : 'Save Changes'}
                 </motion.button>
               </div>
-            </form>
+            </motion.form>
           )}
 
           {/* Security Tab */}
           {activeTab === 'security' && (
-            <form onSubmit={handlePasswordChange} className="space-y-6">
+            <motion.form 
+              onSubmit={handlePasswordChange} 
+              className="space-y-4 sm:space-y-6"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+            >
               <div>
-                <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-4">
+                <h3 className="text-lg sm:text-xl font-medium text-gray-900 dark:text-white mb-4">
                   Change Password
                 </h3>
                 
                 <div className="space-y-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                      Current Password
+                      Current Password *
                     </label>
                     <div className="relative">
                       <input
@@ -537,22 +593,25 @@ const ProfileModal = ({ isOpen, onClose, initialTab = 'profile' }) => {
                         name="currentPassword"
                         value={formData.currentPassword}
                         onChange={handleInputChange}
-                        className="w-full px-3 py-2 pr-10 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:text-white"
+                        className="w-full px-3 py-2 sm:py-3 pr-10 border border-gray-300 dark:border-gray-600 rounded-lg sm:rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:text-white text-sm sm:text-base"
+                        placeholder="Enter your current password"
                         required
                       />
-                      <button
+                      <motion.button
                         type="button"
                         onClick={() => setShowCurrentPassword(!showCurrentPassword)}
-                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 min-w-touch min-h-touch flex items-center justify-center"
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.9 }}
                       >
-                        {showCurrentPassword ? <EyeSlashIcon className="h-5 w-5" /> : <EyeIcon className="h-5 w-5" />}
-                      </button>
+                        {showCurrentPassword ? <EyeSlashIcon className="h-4 w-4 sm:h-5 sm:w-5" /> : <EyeIcon className="h-4 w-4 sm:h-5 sm:w-5" />}
+                      </motion.button>
                     </div>
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                      New Password
+                      New Password *
                     </label>
                     <div className="relative">
                       <input
@@ -560,62 +619,91 @@ const ProfileModal = ({ isOpen, onClose, initialTab = 'profile' }) => {
                         name="newPassword"
                         value={formData.newPassword}
                         onChange={handleInputChange}
-                        className="w-full px-3 py-2 pr-10 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:text-white"
+                        className="w-full px-3 py-2 sm:py-3 pr-10 border border-gray-300 dark:border-gray-600 rounded-lg sm:rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:text-white text-sm sm:text-base"
+                        placeholder="Enter your new password"
                         required
                       />
-                      <button
+                      <motion.button
                         type="button"
                         onClick={() => setShowNewPassword(!showNewPassword)}
-                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 min-w-touch min-h-touch flex items-center justify-center"
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.9 }}
                       >
-                        {showNewPassword ? <EyeSlashIcon className="h-5 w-5" /> : <EyeIcon className="h-5 w-5" />}
-                      </button>
+                        {showNewPassword ? <EyeSlashIcon className="h-4 w-4 sm:h-5 sm:w-5" /> : <EyeIcon className="h-4 w-4 sm:h-5 sm:w-5" />}
+                      </motion.button>
                     </div>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                      Password must be at least 6 characters long
+                    </p>
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                      Confirm New Password
+                      Confirm New Password *
                     </label>
                     <input
                       type="password"
                       name="confirmPassword"
                       value={formData.confirmPassword}
                       onChange={handleInputChange}
-                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:text-white"
+                      className="w-full px-3 py-2 sm:py-3 border border-gray-300 dark:border-gray-600 rounded-lg sm:rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:text-white text-sm sm:text-base"
+                      placeholder="Confirm your new password"
                       required
                     />
                   </div>
                 </div>
 
-                <div className="flex justify-end mt-6">
+                <div className="flex flex-col sm:flex-row justify-end space-y-2 sm:space-y-0 sm:space-x-3 pt-6 border-t border-gray-200 dark:border-gray-700 mt-6">
+                  <motion.button
+                    type="button"
+                    onClick={onClose}
+                    className="w-full sm:w-auto px-4 py-2 sm:px-6 sm:py-3 text-sm sm:text-base font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg sm:rounded-xl hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors min-h-touch"
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    Cancel
+                  </motion.button>
                   <motion.button
                     type="submit"
                     disabled={loading}
-                    className="px-6 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
+                    className="w-full sm:w-auto px-4 py-2 sm:px-6 sm:py-3 text-sm sm:text-base font-medium bg-primary-600 dark:bg-primary-500 text-white rounded-lg sm:rounded-xl hover:bg-primary-700 dark:hover:bg-primary-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors min-h-touch"
+                    whileHover={{ scale: loading ? 1 : 1.02 }}
+                    whileTap={{ scale: loading ? 1 : 0.98 }}
                   >
                     {loading ? 'Changing...' : 'Change Password'}
                   </motion.button>
                 </div>
               </div>
-            </form>
+            </motion.form>
           )}
 
           {/* Preferences Tab */}
           {activeTab === 'preferences' && (
-            <div className="space-y-6">
-              <h3 className="text-lg font-medium text-gray-900 dark:text-white">
+            <motion.div 
+              className="space-y-4 sm:space-y-6"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+            >
+              <h3 className="text-lg sm:text-xl font-medium text-gray-900 dark:text-white">
                 Preferences
               </h3>
-              <p className="text-gray-600 dark:text-gray-400">
-                Preference settings coming soon...
-              </p>
-            </div>
+              <div className="bg-gray-50 dark:bg-gray-800/50 rounded-lg sm:rounded-xl p-4 sm:p-6 border border-gray-200 dark:border-gray-700">
+                <div className="text-center">
+                  <CogIcon className="h-12 w-12 sm:h-16 sm:w-16 text-gray-400 dark:text-gray-500 mx-auto mb-3" />
+                  <p className="text-gray-600 dark:text-gray-400 text-sm sm:text-base">
+                    Preference settings are coming soon...
+                  </p>
+                  <p className="text-gray-500 dark:text-gray-500 text-xs sm:text-sm mt-2">
+                    This section will include notification preferences, privacy settings, and more.
+                  </p>
+                </div>
+              </div>
+            </motion.div>
           )}
         </div>
       </div>
+    </div>
     </Modal>
   );
 };

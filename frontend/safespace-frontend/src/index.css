@@ -2,21 +2,56 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Import mobile-specific styles */
+@import './styles/mobile.css';
+
 @layer base {
   * {
     @apply box-border;
   }
   
+  html {
+    scroll-behavior: smooth;
+    /* Prevent horizontal scrolling on mobile */
+    overflow-x: hidden;
+    /* Better font rendering on mobile */
+    -webkit-text-size-adjust: 100%;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
   body {
-    @apply font-sans antialiased bg-gray-50 text-gray-900 overflow-x-hidden;
+    @apply font-sans antialiased bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-100;
     margin: 0;
+    /* Prevent horizontal scrolling */
+    overflow-x: hidden;
+    /* Better touch interaction */
+    -webkit-tap-highlight-color: transparent;
+    /* Improve font rendering on mobile */
+    text-rendering: optimizeLegibility;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
       'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
       sans-serif;
   }
 
-  html {
-    scroll-behavior: smooth;
+  /* Improve mobile touch targets */
+  button, 
+  [role="button"],
+  a {
+    min-height: 44px;
+    min-width: 44px;
+    /* Better touch feedback */
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
+  }
+
+  /* Fix iOS input zoom issues */
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="tel"],
+  select,
+  textarea {
+    font-size: 16px;
   }
 }
 
@@ -26,14 +61,104 @@
   }
   
   .neu-morphism {
-    @apply bg-gray-50 shadow-[8px_8px_16px_#d1d5db,-8px_-8px_16px_#ffffff];
+    @apply bg-gray-50 shadow-[8px_8px_16px_#d1d5db,-8px_-8px_16px_#ffffff] dark:bg-gray-800 dark:shadow-[8px_8px_16px_#1f2937,-8px_-8px_16px_#374151];
   }
   
   .btn-primary {
-    @apply bg-primary-600 hover:bg-primary-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2;
+    @apply bg-primary-600 hover:bg-primary-700 dark:bg-primary-500 dark:hover:bg-primary-600 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800;
   }
   
   .btn-secondary {
-    @apply bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 px-4 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2;
+    @apply bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 font-medium py-2 px-4 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800;
+  }
+}
+
+@layer utilities {
+  /* Better touch targets for mobile */
+  .min-w-touch {
+    min-width: 44px;
+  }
+  
+  .min-h-touch {
+    min-height: 44px;
+  }
+  
+  /* Smooth scrolling container */
+  .scroll-container {
+    scrollbar-width: thin;
+    scrollbar-color: rgb(156 163 175) transparent;
+  }
+  
+  .scroll-container::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  .scroll-container::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  .scroll-container::-webkit-scrollbar-thumb {
+    background-color: rgb(156 163 175);
+    border-radius: 3px;
+  }
+  
+  .dark .scroll-container::-webkit-scrollbar-thumb {
+    background-color: rgb(75 85 99);
+  }
+  
+  /* Toggle switch improvements */
+  .toggle-bg-enabled {
+    background-color: rgb(37 99 235);
+  }
+  
+  .dark .toggle-bg-enabled {
+    background-color: rgb(59 130 246);
+  }
+  
+  .toggle-bg-disabled {
+    background-color: rgb(229 231 235);
+  }
+  
+  .dark .toggle-bg-disabled {
+    background-color: rgb(55 65 81);
+  }
+  
+  /* Enhanced animations */
+  .animate-blob {
+    animation: blob 7s infinite;
+  }
+  
+  .animation-delay-2000 {
+    animation-delay: 2s;
+  }
+  
+  .animation-delay-4000 {
+    animation-delay: 4s;
+  }
+  
+  @keyframes blob {
+    0% {
+      transform: translate(0px, 0px) scale(1);
+    }
+    33% {
+      transform: translate(30px, -50px) scale(1.1);
+    }
+    66% {
+      transform: translate(-20px, 20px) scale(0.9);
+    }
+    100% {
+      transform: translate(0px, 0px) scale(1);
+    }
+  }
+  
+  /* Switch hover effects */
+  .switch-hover:hover {
+    transform: scale(1.05);
+    transition: transform 0.15s ease-in-out;
+  }
+  
+  .switch-active:active {
+    transform: scale(0.95);
+    transition: transform 0.1s ease-in-out;
   }
 }
