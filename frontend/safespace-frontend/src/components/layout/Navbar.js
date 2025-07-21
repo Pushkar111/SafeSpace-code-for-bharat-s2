@@ -14,6 +14,7 @@ const Navbar = () => {
     const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
     const [profileImageError, setProfileImageError] = useState(false);
     const [isScrolled, setIsScrolled] = useState(false);
+    const [isLoaded, setIsLoaded] = useState(false);
 
     const { user, isAuthenticated, logout } = useAuth();
     const { isDark, toggleTheme } = useTheme();
@@ -21,6 +22,11 @@ const Navbar = () => {
     const location = useLocation();
 
     const isAuthPage = ["/login", "/signup"].includes(location.pathname);
+
+    // Handle initial load to prevent layout shift
+    useEffect(() => {
+        setIsLoaded(true);
+    }, []);
 
     // Add scroll detection
     useEffect(() => {
@@ -73,14 +79,25 @@ const Navbar = () => {
 
         if (hasProfilePic) {
             return (
-                <motion.img
-                    src={user.profilePic.url}
-                    alt={`${user?.name || "User"}'s profile`}
-                    className="h-8 w-8 rounded-full object-cover border border-gray-300 shadow-sm"
-                    onError={handleImageError}
-                    onLoad={() => setProfileImageError(false)}
-                    whileHover={{ scale: 1.1 }}
-                />
+                <motion.div className="relative">
+                    {/* Loading skeleton */}
+                    <div className="absolute inset-0 h-8 w-8 rounded-full bg-gray-200 dark:bg-gray-700 animate-pulse" />
+                    
+                    <motion.img
+                        src={user.profilePic.url}
+                        alt={`${user?.name || "User"}'s profile`}
+                        className="relative h-8 w-8 rounded-full object-cover border border-gray-300 shadow-sm"
+                        onError={handleImageError}
+                        onLoad={() => {
+                            setProfileImageError(false);
+                            // Hide skeleton after image loads
+                            const skeleton = document.querySelector('.absolute.inset-0.h-8.w-8');
+                            if (skeleton) skeleton.style.display = 'none';
+                        }}
+                        whileHover={{ scale: 1.1 }}
+                        style={{ opacity: profileImageError ? 0 : 1 }}
+                    />
+                </motion.div>
             );
         }
 
@@ -95,13 +112,24 @@ const Navbar = () => {
     if (isAuthPage) return null;
 
     return (
-        <header className="fixed top-0 left-0 right-0 z-50 w-full">
+        <header className="fixed top-0 left-0 right-0 z-50 w-full navbar-container">
+            {/* Loading placeholder to prevent layout shift */}
+            {!isLoaded && (
+                <div className={`w-full transition-all duration-500 ease-in-out ${
+                    isScrolled
+                        ? "mt-2 sm:mt-4 py-2 px-3 sm:px-4"
+                        : "py-3 sm:py-5 px-3 sm:px-6"
+                }`}>
+                    <div className="animate-pulse bg-gray-200 dark:bg-gray-700 rounded-xl h-16 w-full max-w-6xl mx-auto"></div>
+                </div>
+            )}
+            
             <div className="flex justify-center w-full px-4 sm:px-6 lg:px-8">
                 <motion.nav
-                    initial={{ opacity: 0, y: -20 }}
+                    initial={{ opacity: isLoaded ? 1 : 0, y: isLoaded ? 0 : -20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6 }}
-                    className={`transition-all duration-500 ease-in-out w-full ${
+                    transition={{ duration: isLoaded ? 0.3 : 0.6, ease: "easeOut" }}
+                    className={`navbar-transition w-full ${
                         isScrolled
                             ? "mt-2 sm:mt-4 py-2 px-3 sm:px-4 max-w-6xl bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl shadow-lg shadow-primary-500/10 border border-gray-200/50 dark:border-gray-800/50 rounded-xl sm:rounded-2xl"
                             : "py-3 sm:py-5 px-3 sm:px-6 max-w-7xl bg-transparent"

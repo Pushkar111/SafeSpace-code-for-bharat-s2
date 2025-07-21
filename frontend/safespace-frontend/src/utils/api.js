@@ -7,8 +7,10 @@ const FASTAPI_BASE_URL = process.env.REACT_APP_FASTAPI_URL || 'http://localhost:
 export const nodeAPI = axios.create({
   baseURL: API_BASE_URL,
   withCredentials: true, // For HttpOnly cookies
+  timeout: 15000, // 15 second timeout for mobile networks
   headers: {
     'Content-Type': 'application/json',
+    'Accept': 'application/json',
   },
 });
 
@@ -396,7 +398,7 @@ export const loginUser = async (email, password) => {
       user: response.data.user,
       message: response.data.message
     };
-  } catch (error) {
+  } catch (error) {    
     return {
       success: false,
       message: error.response?.data?.message || 'Login failed'
